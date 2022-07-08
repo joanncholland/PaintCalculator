@@ -5,8 +5,8 @@ public class Main {
         /*
          * Calculator to find number of paint buckets required to paint the walls of a room
          * -- Takes in number of walls
-         * -- Takes in measurement system being used
-         * -- Takes in paint bucket volume choice (1l, 2.5l, 5l, 10l)
+         * -- Takes in measurement system being used (metric/imperial)
+         * -- Takes in paint bucket volume choice for both measurement systems
          * -- Considers obstructions on the walls with different shapes
          * -- Outputs number of paint buckets required and total cost to buy them
          */
