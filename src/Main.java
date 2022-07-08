@@ -5,12 +5,11 @@ public class Main {
         /*
          * Calculator to find number of paint buckets required to paint the walls of a room
          * -- Takes in number of walls
+         * -- Takes in measurement system being used
          * -- Takes in paint bucket volume choice (1l, 2.5l, 5l, 10l)
-         * -- Considers obstructions on the walls
+         * -- Considers obstructions on the walls with different shapes
          * -- Outputs number of paint buckets required and total cost to buy them
          */
-
-        // git init, git status, git add, git commit + message
 
         // Scanner for user input
         Scanner input = new Scanner(System.in);
@@ -22,9 +21,11 @@ public class Main {
         double totalWallArea = 0.0;
         double numberOfPaintBuckets;
         int wallCounter = 1;
+        int obstructionCounter = 1;
         int bucketSizeSelection = 0;
+        String nameOfBucketSize = "";
         String[] walls = new String[0];
-        String[][] costOfLitrePaintBucket = {{"1l", "2.5l", "5l", "10l"}, {"5.99", "7.99", "12.99", "20.99"}};
+        String[][] costOfLitrePaintBucket = {{"1 litres", "2.5 litres", "5 litres", "10 litres"}, {"5.99", "7.99", "12.99", "20.99"}};
         String[][] costOfGallonPaintBucket = {{"quarter pint", "half pint", "one pint", "one quart", "half gallon", "one gallon"},
                 {"2.99", "4.99", "8.99", "10.99", "12.99", "24.99", "49.99"}};
         boolean inputValid = false;
@@ -97,13 +98,12 @@ public class Main {
                 System.out.println("4 - 10 litres");
                 try {
                     bucketSizeSelection = Integer.parseInt(input.nextLine());
-                    if (bucketSizeSelection < 0 || bucketSizeSelection > 4) {
-                        System.out.println("Please enter a positive integer.");
-                    } else {
-                        inputValid = true;
-                    }
+                    nameOfBucketSize = costOfLitrePaintBucket[0][bucketSizeSelection - 1];
+                    inputValid = true;
                 } catch (NumberFormatException e) {
                     System.out.println("This input is not an integer - please try again.");
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    System.out.println("Please enter a positive integer between 1 and 4 inclusive.");
                 }
             }
 
@@ -133,13 +133,13 @@ public class Main {
                 System.out.println("6 - one gallon");
                 try {
                     bucketSizeSelection = Integer.parseInt(input.nextLine());
-                    if (bucketSizeSelection < 0 || bucketSizeSelection > 6) {
-                        System.out.println("Please enter a positive integer.");
-                    } else {
-                        inputValid = true;
-                    }
+                    nameOfBucketSize = costOfGallonPaintBucket[0][bucketSizeSelection - 1];
+                    inputValid = true;
                 } catch (NumberFormatException e) {
                     System.out.println("This input is not an integer - please try again.");
+                }
+                catch (ArrayIndexOutOfBoundsException e) {
+                    System.out.println("Please enter a positive integer between 1 and 6 inclusive.");
                 }
             }
 
@@ -202,7 +202,6 @@ public class Main {
 
             // Ask if they have obstructions on the wall(s)
             String haveObstruction;
-            inputValid = false;
             do {
                 System.out.println(("Do you have obstructions on the wall(s)? (Y/N)"));
                 haveObstruction = input.nextLine();
@@ -235,7 +234,7 @@ public class Main {
                     int whichShape = 0;
                     inputValid = false;
                     while (!inputValid) {
-                        System.out.println("Is the obstruction a square, circle or triangle?");
+                        System.out.println("Is obstruction number " + obstructionCounter + " a square, circle or triangle?");
                         System.out.println("1 - square");
                         System.out.println("2 - circle");
                         System.out.println("3 - triangle");
@@ -249,7 +248,10 @@ public class Main {
                         } catch (NumberFormatException e) {
                             System.out.println("This input is not a number - please try again.");
                         }
+
+                        obstructionCounter++;
                     }
+
 
                     // Ask for height of obstruction
                     double obstructionHeight = 0;
@@ -287,11 +289,11 @@ public class Main {
 
                     double currentObstructionArea;
                     if (whichShape == 1) {
-                        currentObstructionArea = obstructionWidth * obstructionHeight;
+                        currentObstructionArea = squareArea(obstructionWidth, obstructionHeight);
                     } else if (whichShape == 2) {
-                        currentObstructionArea = 3.14 * obstructionHeight * obstructionWidth;
+                        currentObstructionArea = circleArea(obstructionWidth, obstructionHeight);
                     } else {
-                        currentObstructionArea = (obstructionHeight * obstructionWidth) / 2;
+                        currentObstructionArea = triangleArea(obstructionWidth, obstructionHeight);
                     }
 
                     totalObstructionArea += currentObstructionArea;
@@ -300,6 +302,7 @@ public class Main {
                 System.out.println("The total obstruction area on this wall is: " + totalObstructionArea +
                         (measurementSystem == 1 ? " metres squared" : " square feet"));
             }
+            obstructionCounter = 1;
 
             // Calculate total area of wall - if they have obstructions, minus from total wall area
             totalWallArea = totalWallArea + ((height * width) - totalObstructionArea);
@@ -318,14 +321,15 @@ public class Main {
         // Divide wall area by paint bucket coverage and round up to get total number of paint buckets
         double divisionResult;
         if (measurementSystem == 1) {
-            divisionResult = (litrePaintBucketCoverage > 0) ? (totalWallArea / litrePaintBucketCoverage) * numberOfCoats : 0.0;
+            divisionResult = divisionResult(litrePaintBucketCoverage, totalWallArea, numberOfCoats);
         } else {
-            divisionResult = (gallonPaintBucketCoverage > 0) ? (totalWallArea / gallonPaintBucketCoverage) * numberOfCoats : 0.0;
+            divisionResult = divisionResult(gallonPaintBucketCoverage, totalWallArea, numberOfCoats);
         }
         
         numberOfPaintBuckets = Math.ceil(divisionResult);
         System.out.println("----------------------------------------------------");
-        System.out.println("You would need " + numberOfPaintBuckets + " paint buckets to apply " + numberOfCoats + " coat(s) on the wall(s).");
+        System.out.println("You would need " + numberOfPaintBuckets + " paint buckets, each containing " + nameOfBucketSize
+                + " to apply " + numberOfCoats + " coat(s) on the wall(s).");
         System.out.println("With each paint bucket costing " +
                 (measurementSystem == 1 ? String.format("%.2f", Double.parseDouble(costOfLitrePaintBucket[1][bucketSizeSelection-1])) :
                         String.format("%.2f", Double.parseDouble(costOfGallonPaintBucket[1][bucketSizeSelection-1]))) +
@@ -335,5 +339,21 @@ public class Main {
         System.out.println("After painting the walls, you will have " +
                 String.format("%.2f", (numberOfPaintBuckets - divisionResult) * bucketSizeSelection) + " " +
                 (measurementSystem == 1 ? "litres" : "gallons") + " of paint left over.");
+    }
+
+    public static double squareArea(double x, double y) {
+        return x * y;
+    }
+
+    public static double circleArea(double x, double y) {
+        return 3.14 * x * y;
+    }
+
+    public static double triangleArea(double x, double y) {
+        return (x * y) / 2;
+    }
+
+    public static double divisionResult(double coverage, double totalWallArea, double numberOfCoats) {
+        return (coverage > 0) ? (totalWallArea / coverage) * numberOfCoats : 0.0;
     }
 }
