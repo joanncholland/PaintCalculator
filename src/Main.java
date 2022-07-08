@@ -37,7 +37,7 @@ public class Main {
             try {
                 numberOfWalls = Integer.parseInt(input.nextLine());
 
-                if (numberOfWalls < 0) {
+                if (numberOfWalls <= 0) {
                     System.out.println("Please enter a positive integer.");
                 } else {
                     walls = new String[numberOfWalls];
