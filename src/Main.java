@@ -55,7 +55,7 @@ public class Main {
             System.out.println("How many coats would you like to apply?");
             try {
                 numberOfCoats = Integer.parseInt(input.nextLine());
-                if (numberOfCoats < 0) {
+                if (numberOfCoats <= 0) {
                     System.out.println("Please enter a positive integer.");
                 } else {
                     inputValid = true;
@@ -74,7 +74,7 @@ public class Main {
             System.out.println("2 - imperial");
             try {
                 measurementSystem = Integer.parseInt(input.nextLine());
-                if (measurementSystem < 0 || measurementSystem > 2) {
+                if (measurementSystem <= 0 || measurementSystem > 2) {
                     System.out.println("Please try again - enter either 1 for metric and 2 for imperial.");
                 } else {
                     inputValid = true;
@@ -173,7 +173,7 @@ public class Main {
                 System.out.println("Please enter the height of wall " + wallCounter + ": ");
                 try {
                     height = Double.parseDouble(input.nextLine());
-                    if (height < 0) {
+                    if (height <= 0) {
                         System.out.println("Please enter a positive number.");
                     } else {
                         inputValid = true;
@@ -190,7 +190,7 @@ public class Main {
                 System.out.println("Please enter the width of wall " + wallCounter + ": ");
                 try {
                     width = Double.parseDouble(input.nextLine());
-                    if (width < 0) {
+                    if (width <= 0) {
                         System.out.println("Please enter a positive number.");
                     } else {
                         inputValid = true;
@@ -219,7 +219,7 @@ public class Main {
                     System.out.println("How many obstructions are on the wall?");
                     try {
                         numberOfObstructions = Integer.parseInt(input.nextLine());
-                        if (numberOfObstructions < 0) {
+                        if (numberOfObstructions <= 0) {
                             System.out.println("Please enter a positive number.");
                         } else {
                             inputValid = true;
@@ -240,7 +240,7 @@ public class Main {
                         System.out.println("3 - triangle");
                         try {
                             whichShape = Integer.parseInt(input.nextLine());
-                            if (whichShape < 0 || whichShape > 3) {
+                            if (whichShape <= 0 || whichShape > 3) {
                                 System.out.println("Please enter a number between 1 and 3.");
                             } else {
                                 inputValid = true;
@@ -260,7 +260,7 @@ public class Main {
                         System.out.println("Please enter the height of the obstruction: ");
                         try {
                             obstructionHeight = Double.parseDouble(input.nextLine());
-                            if (obstructionHeight < 0) {
+                            if (obstructionHeight <= 0) {
                                 System.out.println("Please enter a positive number.");
                             } else {
                                 inputValid = true;
@@ -277,7 +277,7 @@ public class Main {
                         System.out.println("Please enter width of the obstruction: ");
                         try {
                             obstructionWidth = Double.parseDouble(input.nextLine());
-                            if (obstructionWidth < 0) {
+                            if (obstructionWidth <= 0) {
                                 System.out.println("Please enter a positive number.");
                             } else {
                                 inputValid = true;
